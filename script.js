@@ -59,15 +59,69 @@ function guess(id, guess) {
 function showProgress() {
   let currentQuestionNumber = quiz.questionIndex + 1;
   let progressElement = document.getElementById("progress");
-  progressElement.innerHTML = `Question ${currentQuestionNumber} of ${quiz.question.length}`;
+  progressElement.innerHTML = `Question ${currentQuestionNumber} of ${quiz.questions.length}`;
 }
 
 function showScores() {
   let quizEndHTML = `
 <h1>Quiz Completed</h1>
-<h2 id="score">You scored: ${quiz.score} / ${quiz.question.length}</h2>
+<h2 id="score">You scored: ${quiz.score} / ${quiz.questions.length}</h2>
 <div class="quiz-repeat">
-<a href="index.html">Take Quiz Again</a>`;
+<a href="index.html">Take Quiz Again</a></div>`;
   let quizElement = document.getElementById("quiz");
   quizElement.innerHTML = quizEndHTML;
 }
+
+let questions = [
+  new Question(
+    "Elige lunes en inglés",
+    ["Monday", "Wednesday", "Sunday"],
+    "Monday"
+  ),
+  new Question(
+    "Elige miércoles en inglés",
+    ["Friday", "Wednesday", "Sunday"],
+    "Wednesday"
+  ),
+  new Question(
+    "Elige sábado en inglés",
+    ["Monday", "Tuesday", "Saturday"],
+    "Saturday"
+  ),
+  new Question(
+    "Elige domingo en inglés",
+    ["Sunday", "Monday", "Thursday"],
+    "Sunday"
+  ),
+  new Question(
+    "Elige martes en inglés",
+    ["Thursday", "Tuesday", "Friday"],
+    "Tuesday"
+  ),
+];
+
+let quiz = new Quiz(questions);
+
+displayQuestion();
+
+let time = 10;
+let quizTimeInMinutes = time * 60 * 60;
+quizTime = quizTimeInMinutes / 60;
+
+let counting = document.getElementById("count-down");
+
+function startCountdown() {
+  let quizTimer = setInterval(function () {
+    if (quizTime <= 0) {
+      clearInterval(quizTimer);
+      showScores();
+    } else {
+      quizTime--;
+      let sec = Math.floor(quizTime % 60);
+      let min = Math.floor(quizTime / 60) % 60;
+      counting.innerHTML = `Time: ${min}:${sec}`;
+    }
+  }, 1000);
+}
+
+startCountdown();
